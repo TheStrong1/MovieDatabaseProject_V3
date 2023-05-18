@@ -1,9 +1,11 @@
 package edu.miracosta.cs112.moviedatabaseproject_v3.controller;
 
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.*;
+import edu.miracosta.cs112.moviedatabaseproject_v3.model.Media;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.MediaDatabase;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.Movie;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.TvShow;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -27,12 +29,30 @@ public class EditMediaController {
     private MediaDatabase mediaDatabase;
     private int editIndex;
 
+    public void initialize() {
+        mediaTypeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+            episodesField.setVisible("TV Show".equals(newValue));
+        });
+    }
+
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
         this.mediaDatabase = mediaDatabase;
     }
 
     public void setEditIndex(int editIndex) {
         this.editIndex = editIndex;
+        Media media = mediaDatabase.getAllMedia(null).get(editIndex);
+        titleField.setText(media.getTitle());
+        releaseYearField.setText(String.valueOf(media.getReleaseYear()));
+        ratingField.setText(String.valueOf(media.getRating()));
+        if (media instanceof Movie) {
+            mediaTypeCombo.setValue("Movie");
+            durationField.setText(String.valueOf(((Movie) media).getDuration()));
+        } else if (media instanceof TvShow) {
+            mediaTypeCombo.setValue("TV Show");
+            durationField.setText(String.valueOf(((TvShow) media).getNumberOfSeasons()));
+            episodesField.setText(String.valueOf(((TvShow) media).getNumberOfEpisodes()));
+        }
     }
 
     @FXML

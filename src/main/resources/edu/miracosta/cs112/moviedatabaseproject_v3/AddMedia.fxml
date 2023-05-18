@@ -7,7 +7,7 @@
 <?import java.lang.String?>
 
 <VBox fx:controller="edu.miracosta.cs112.moviedatabaseproject_v3.controller.AddMediaController"
-      xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="10">
+      xmlns:fx="http://javafx.com/fxml" alignment="CENTER" spacing="10" stylesheets="@main.css">
     <Label text="Add Media" />
     <ComboBox fx:id="mediaTypeCombo" promptText="Media Type">
         <items>
