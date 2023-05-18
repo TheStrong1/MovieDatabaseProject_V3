@@ -1,0 +1,32 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-base: #ffffff;
+}
+
+.button {
+    -fx-background-color: #2196F3;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+}
+
+.button:hover {
+    -fx-background-color: #1976D2;
+}
+
+.label {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.text-field, .combo-box {
+    -fx-font-size: 14px;
+}
+
+.list-view {
+    -fx-font-size: 14px;
+    -fx-background-color: #f5f5f5;
+}
+
+.list-view:focused {
+    -fx-background-color: #eeeeee;
+}
