@@ -5,7 +5,6 @@ import edu.miracosta.cs112.moviedatabaseproject_v3.model.Media;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.MediaDatabase;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.Movie;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.TvShow;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
@@ -36,15 +35,24 @@ public class EditMediaController {
     }
 
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
+        if (mediaDatabase == null) {
+            throw new IllegalArgumentException("MediaDatabase cannot be null.");
+        }
         this.mediaDatabase = mediaDatabase;
     }
 
     public void setEditIndex(int editIndex) {
+        if (editIndex < 0) {
+            throw new IllegalArgumentException("Invalid index.");
+        }
         this.editIndex = editIndex;
+
         Media media = mediaDatabase.getAllMedia(null).get(editIndex);
+
         titleField.setText(media.getTitle());
         releaseYearField.setText(String.valueOf(media.getReleaseYear()));
         ratingField.setText(String.valueOf(media.getRating()));
+
         if (media instanceof Movie) {
             mediaTypeCombo.setValue("Movie");
             durationField.setText(String.valueOf(((Movie) media).getDuration()));
@@ -57,18 +65,29 @@ public class EditMediaController {
 
     @FXML
     public void editMedia() {
+        String title = titleField.getText();
+        String releaseYearText = releaseYearField.getText();
+        String ratingText = ratingField.getText();
+        String durationText = durationField.getText();
+        String episodesText = episodesField.getText();
+
+        if (title.isEmpty() || releaseYearText.isEmpty() || ratingText.isEmpty() || durationText.isEmpty() ||
+                ("TV Show".equals(mediaTypeCombo.getValue()) && episodesText.isEmpty())) {
+            showErrorDialog("All fields must be filled.");
+            return;
+        }
+
         try {
-            String title = titleField.getText();
-            int releaseYear = Integer.parseInt(releaseYearField.getText());
-            double rating = Double.parseDouble(ratingField.getText());
+            int releaseYear = Integer.parseInt(releaseYearText);
+            double rating = Double.parseDouble(ratingText);
 
             if ("Movie".equals(mediaTypeCombo.getValue())) {
-                int duration = Integer.parseInt(durationField.getText());
+                int duration = Integer.parseInt(durationText);
                 Movie movie = new Movie(title, releaseYear, rating, duration);
                 mediaDatabase.editMedia(editIndex, movie);
             } else {
-                int numberOfSeasons = Integer.parseInt(durationField.getText());
-                int numberOfEpisodes = Integer.parseInt(episodesField.getText());
+                int numberOfSeasons = Integer.parseInt(durationText);
+                int numberOfEpisodes = Integer.parseInt(episodesText);
                 TvShow tvShow = new TvShow(title, releaseYear, rating, numberOfSeasons, numberOfEpisodes);
                 mediaDatabase.editMedia(editIndex, tvShow);
             }

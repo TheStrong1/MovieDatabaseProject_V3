@@ -101,6 +101,11 @@ public class MainController {
         String searchText = searchField.getText();
         String filter = filterCombo.getValue();
 
+        // check if searchText is null or empty
+        if (searchText == null || searchText.trim().isEmpty()) {
+            searchText = ""; // ensure searchText is not null
+        }
+
         if (Objects.equals(filter, "All")) {
             mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllMedia(searchText)));
         } else if (Objects.equals(filter, "Movies")) {
@@ -112,6 +117,7 @@ public class MainController {
         // Ensure the table is sorted after updating it
         sortMedia();
     }
+
 
     @FXML
     public void addMedia() {

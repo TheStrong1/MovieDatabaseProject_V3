@@ -33,11 +33,16 @@ public class AddMediaController {
 
 
     public void addMedia() {
-        String title = titleField.getText();
+        String title = titleField.getText().trim();
         String mediaType = mediaTypeCombo.getValue();
 
         if (mediaType == null) {
             showErrorAlert(new Exception("Must select either Movie or TV Show."));
+            return;
+        }
+
+        if (title == null || title.isEmpty()) {
+            showErrorAlert(new Exception("Title cannot be empty."));
             return;
         }
 

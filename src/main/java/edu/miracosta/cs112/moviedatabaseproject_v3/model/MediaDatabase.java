@@ -67,6 +67,11 @@ public class MediaDatabase {
     }
 
     private List<Media> searchMedia(String searchText, List<Media> mediaList) {
+        // Return all media when searchText is null or empty
+        if (searchText == null || searchText.isEmpty()) {
+            return new ArrayList<>(mediaList);
+        }
+
         String searchLowercase = searchText.toLowerCase();
         return mediaList.stream()
                 .filter(m -> m.getTitle().toLowerCase().contains(searchLowercase) ||
@@ -77,7 +82,6 @@ public class MediaDatabase {
                                 Integer.toString(((TvShow) m).getNumberOfEpisodes()).contains(searchText))))
                 .collect(Collectors.toList());
     }
-
 
     public void sortMedia(SortOption sortOption) {
         if ((sortOption == SortOption.DURATION_ASCENDING || sortOption == SortOption.DURATION_DESCENDING) &&
@@ -124,4 +128,3 @@ public class MediaDatabase {
         EPISODES_DESCENDING
     }
 }
-
