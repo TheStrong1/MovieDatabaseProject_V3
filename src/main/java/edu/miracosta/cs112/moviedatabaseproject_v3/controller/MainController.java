@@ -6,6 +6,7 @@ import edu.miracosta.cs112.moviedatabaseproject_v3.model.Movie;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.TvShow;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.MediaDatabase;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -44,10 +45,10 @@ public class MainController {
     private TableColumn<Media, Integer> releaseYearColumn;
 
     @FXML
-    private TableColumn<Media, Integer> durationColumn;
+    private TableColumn<Media, String> durationColumn;
 
     @FXML
-    private TableColumn<Media, Integer> episodesColumn;
+    private TableColumn<Media, String> episodesColumn;
 
     @FXML
     private TableColumn<Media, Double> ratingColumn;
@@ -67,17 +68,17 @@ public class MainController {
         // Set up the cell factories for durationColumn and episodesColumn
         durationColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue() instanceof Movie movie) {
-                return movie.durationProperty().asObject();
+                return new SimpleObjectProperty<>(String.valueOf(movie.getDuration()));
             } else {
-                return new SimpleIntegerProperty(-1).asObject();
+                return new SimpleObjectProperty<>("");
             }
         });
 
         episodesColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue() instanceof TvShow tvShow) {
-                return tvShow.numberOfEpisodesProperty().asObject();
+                return new SimpleObjectProperty<>(String.valueOf(tvShow.getNumberOfEpisodes()));
             } else {
-                return new SimpleIntegerProperty(-1).asObject();
+                return new SimpleObjectProperty<>("");
             }
         });
 

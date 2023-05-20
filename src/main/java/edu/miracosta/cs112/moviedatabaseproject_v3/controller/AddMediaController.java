@@ -2,6 +2,8 @@ package edu.miracosta.cs112.moviedatabaseproject_v3.controller;
 
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.*;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -23,14 +25,29 @@ public class AddMediaController {
 
     private MediaDatabase mediaDatabase;
 
-    public void initialize(MediaDatabase mediaDatabase) {
-        this.mediaDatabase = mediaDatabase;
+    public void initialize() {
+        mediaTypeCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue != null) {
+                    switch (newValue) {
+                        case "Movie":
+                            durationField.setPromptText("Duration");
+                            episodesField.setVisible(false);
+                            break;
+                        case "TV Show":
+                            durationField.setPromptText("Seasons");
+                            episodesField.setVisible(true);
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
         this.mediaDatabase = mediaDatabase;
     }
-
 
     public void addMedia() {
         String title = titleField.getText().trim();
@@ -68,7 +85,6 @@ public class AddMediaController {
             showErrorAlert(e);
         }
     }
-
 
     private void showSuccessAlert(Media media) {
         Alert alert = new Alert(AlertType.INFORMATION);
