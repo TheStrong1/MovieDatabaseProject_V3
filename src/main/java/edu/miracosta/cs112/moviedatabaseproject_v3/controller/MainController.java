@@ -5,7 +5,7 @@ import edu.miracosta.cs112.moviedatabaseproject_v3.model.Media;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.Movie;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.TvShow;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.MediaDatabase;
-import javafx.beans.property.SimpleIntegerProperty;
+import edu.miracosta.cs112.moviedatabaseproject_v3.service.SearchService;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,7 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
 public class MainController {
@@ -55,17 +55,17 @@ public class MainController {
 
     private MediaDatabase mediaDatabase;
 
+    private SearchService searchService;
+
     @FXML
     public void initialize() {
-        // Initialize the mediaDatabase
         mediaDatabase = new MediaDatabase();
+        searchService = new SearchService();
 
-        // Set up the table columns
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         releaseYearColumn.setCellValueFactory(cellData -> cellData.getValue().releaseYearProperty().asObject());
         ratingColumn.setCellValueFactory(cellData -> cellData.getValue().ratingProperty().asObject());
 
-        // Set up the cell factories for durationColumn and episodesColumn
         durationColumn.setCellValueFactory(cellData -> {
             if (cellData.getValue() instanceof Movie movie) {
                 return new SimpleObjectProperty<>(String.valueOf(movie.getDuration()));
@@ -82,64 +82,47 @@ public class MainController {
             }
         });
 
-        // For now, filterCombo just contains two options
         filterCombo.getItems().addAll("All", "Movies", "TV Shows");
 
-        // Initialize the sortCombo
         ObservableList<String> sortOptions = FXCollections.observableArrayList("Title", "Release Year", "Rating");
         sortCombo.setItems(sortOptions);
 
-        // Update the table when the search text or filter option changes
         searchField.textProperty().addListener((obs, oldText, newText) -> updateTable());
         filterCombo.valueProperty().addListener((obs, oldText, newText) -> updateTable());
-        sortCombo.valueProperty().addListener((obs, oldText, newText) -> sortMedia());
+        sortCombo.valueProperty().addListener((obs, oldText, newText) -> updateTable());
 
-        // Load the initial data
         updateTable();
     }
 
     private void updateTable() {
-        String searchText = searchField.getText();
-        String filter = filterCombo.getValue();
+        String searchText = searchField.getText() == null ? "" : searchField.getText();
+        String filterType = filterCombo.getValue();
 
-        // check if searchText is null or empty
-        if (searchText == null || searchText.trim().isEmpty()) {
-            searchText = ""; // ensure searchText is not null
+        List<Media> allMedia;
+        if (Objects.equals(filterType, "Movies")) {
+            allMedia = mediaDatabase.getAllMovies();
+        } else if (Objects.equals(filterType, "TV Shows")) {
+            allMedia = mediaDatabase.getAllTvShows();
+        } else {
+            allMedia = mediaDatabase.getAllMedia();
         }
 
-        if (Objects.equals(filter, "All")) {
-            mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllMedia(searchText)));
-        } else if (Objects.equals(filter, "Movies")) {
-            mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllMovies(searchText)));
-        } else if (Objects.equals(filter, "TV Shows")) {
-            mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllTvShows(searchText)));
-        }
-
-        // Ensure the table is sorted after updating it
+        List<Media> result = searchService.searchMedia(searchText, allMedia);
+        mediaTableView.setItems(FXCollections.observableArrayList(result));
         sortMedia();
     }
-
 
     @FXML
     public void addMedia() {
         try {
-            // Load the fxml file
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddMedia.fxml"));
             Parent addMediaParent = fxmlLoader.load();
-
-            // Access the controller and call a method
             AddMediaController controller = fxmlLoader.getController();
-
-            // Pass the MediaDatabase to the AddMediaController
             controller.setMediaDatabase(mediaDatabase);
-
-            // Create a new stage and set the scene
             Stage stage = new Stage();
             stage.setTitle("Add Media");
             stage.setScene(new Scene(addMediaParent));
             stage.show();
-
-            // Refresh the table view when the AddMedia stage is closed
             stage.setOnHidden(event -> updateTable());
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,7 +134,6 @@ public class MainController {
         Media selectedMedia = mediaTableView.getSelectionModel().getSelectedItem();
 
         if (selectedMedia == null) {
-            // Show an alert if no media is selected
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
@@ -161,26 +143,15 @@ public class MainController {
         }
 
         try {
-            // Load the fxml file
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EditMedia.fxml"));
             Parent editMediaParent = fxmlLoader.load();
-
-            // Access the controller and call a method
             EditMediaController controller = fxmlLoader.getController();
-
-            // Pass the MediaDatabase to the EditMediaController
             controller.setMediaDatabase(mediaDatabase);
-
-            // Pass the index of the selected media to the EditMediaController
-            controller.setEditIndex(mediaDatabase.getAllMedia("").indexOf(selectedMedia));
-
-            // Create a new stage and set the scene
+            controller.setEditIndex(mediaDatabase.getAllMedia().indexOf(selectedMedia));
             Stage stage = new Stage();
             stage.setTitle("Edit Media");
             stage.setScene(new Scene(editMediaParent));
             stage.show();
-
-            // Refresh the table view when the EditMedia stage is closed
             stage.setOnHidden(event -> updateTable());
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,22 +161,25 @@ public class MainController {
     @FXML
     public void sortMedia() {
         String sortField = sortCombo.getValue();
+        MediaDatabase.SortOption sortOption;
 
         if (sortField != null) {
             switch (sortField) {
                 case "Title":
-                    FXCollections.sort(mediaTableView.getItems(), Comparator.comparing(Media::getTitle));
+                    sortOption = MediaDatabase.SortOption.TITLE_ASCENDING;
                     break;
                 case "Release Year":
-                    FXCollections.sort(mediaTableView.getItems(), Comparator.comparingInt(Media::getReleaseYear));
+                    sortOption = MediaDatabase.SortOption.YEAR_ASCENDING;
                     break;
                 case "Rating":
-                    FXCollections.sort(mediaTableView.getItems(), Comparator.comparingDouble(Media::getRating));
+                    sortOption = MediaDatabase.SortOption.RATING_ASCENDING;
                     break;
                 default:
-                    // Handle invalid sort field if necessary
-                    break;
+                    return;
             }
+
+            mediaDatabase.sortMedia(sortOption);
+            mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllMedia()));
         }
     }
 

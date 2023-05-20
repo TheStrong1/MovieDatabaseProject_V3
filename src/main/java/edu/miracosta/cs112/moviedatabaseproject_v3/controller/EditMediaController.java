@@ -47,7 +47,7 @@ public class EditMediaController {
         }
         this.editIndex = editIndex;
 
-        Media media = mediaDatabase.getAllMedia(null).get(editIndex);
+        Media media = mediaDatabase.getAllMedia().get(editIndex);
 
         titleField.setText(media.getTitle());
         releaseYearField.setText(String.valueOf(media.getReleaseYear()));

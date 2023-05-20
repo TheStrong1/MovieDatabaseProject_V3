@@ -1,8 +1,9 @@
 package edu.miracosta.cs112.moviedatabaseproject_v3.model;
 
-import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.*;
-
-import java.util.*;
+import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseException;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class MediaDatabase {
@@ -50,67 +51,54 @@ public class MediaDatabase {
         }
     }
 
-    public List<Media> getAllMedia(String searchText) {
-        return searchMedia(searchText, media);
+    public List<Media> getAllMedia() {
+        return new ArrayList<>(media);
     }
 
-    public List<Media> getAllMovies(String searchText) {
-        return searchMedia(searchText, media.stream()
+    public List<Media> getAllMovies() {
+        return media.stream()
                 .filter(m -> m instanceof Movie)
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
     }
 
-    public List<Media> getAllTvShows(String searchText) {
-        return searchMedia(searchText, media.stream()
+    public List<Media> getAllTvShows() {
+        return media.stream()
                 .filter(m -> m instanceof TvShow)
-                .collect(Collectors.toList()));
-    }
-
-    private List<Media> searchMedia(String searchText, List<Media> mediaList) {
-        // Return all media when searchText is null or empty
-        if (searchText == null || searchText.isEmpty()) {
-            return new ArrayList<>(mediaList);
-        }
-
-        String searchLowercase = searchText.toLowerCase();
-        return mediaList.stream()
-                .filter(m -> m.getTitle().toLowerCase().contains(searchLowercase) ||
-                        Integer.toString(m.getReleaseYear()).contains(searchText) ||
-                        (m.getRating() + "").contains(searchText) ||
-                        (m instanceof Movie && Integer.toString(((Movie) m).getDuration()).contains(searchText)) ||
-                        (m instanceof TvShow && (Integer.toString(((TvShow) m).getNumberOfSeasons()).contains(searchText) ||
-                                Integer.toString(((TvShow) m).getNumberOfEpisodes()).contains(searchText))))
                 .collect(Collectors.toList());
     }
 
     public void sortMedia(SortOption sortOption) {
-        if ((sortOption == SortOption.DURATION_ASCENDING || sortOption == SortOption.DURATION_DESCENDING) &&
-                media.stream().anyMatch(m -> !(m instanceof Movie))) {
-            throw new IllegalArgumentException("Cannot sort by duration if list contains non-Movie items.");
+        switch (sortOption) {
+            case DURATION_ASCENDING:
+                media.sort(Comparator.comparingInt(m -> m instanceof Movie ? ((Movie) m).getDuration() : Integer.MAX_VALUE));
+                break;
+            case DURATION_DESCENDING:
+                media.sort(Comparator.comparingInt((Media m) -> m instanceof Movie ? ((Movie) m).getDuration() : Integer.MAX_VALUE).reversed());
+                break;
+            case SEASONS_ASCENDING:
+                media.sort(Comparator.comparingInt(m -> m instanceof TvShow ? ((TvShow) m).getNumberOfSeasons() : Integer.MAX_VALUE));
+                break;
+            case SEASONS_DESCENDING:
+                media.sort(Comparator.comparingInt((Media m) -> m instanceof TvShow ? ((TvShow) m).getNumberOfSeasons() : Integer.MAX_VALUE).reversed());
+                break;
+            case EPISODES_ASCENDING:
+                media.sort(Comparator.comparingInt(m -> m instanceof TvShow ? ((TvShow) m).getNumberOfEpisodes() : Integer.MAX_VALUE));
+                break;
+            case EPISODES_DESCENDING:
+                media.sort(Comparator.comparingInt((Media m) -> m instanceof TvShow ? ((TvShow) m).getNumberOfEpisodes() : Integer.MAX_VALUE).reversed());
+                break;
+            default:
+                Comparator<Media> comparator = switch (sortOption) {
+                    case TITLE_ASCENDING -> Comparator.comparing(Media::getTitle);
+                    case TITLE_DESCENDING -> Comparator.comparing(Media::getTitle).reversed();
+                    case YEAR_ASCENDING -> Comparator.comparingInt(Media::getReleaseYear);
+                    case YEAR_DESCENDING -> Comparator.comparingInt(Media::getReleaseYear).reversed();
+                    case RATING_ASCENDING -> Comparator.comparingDouble(Media::getRating);
+                    case RATING_DESCENDING -> Comparator.comparingDouble(Media::getRating).reversed();
+                    default -> throw new IllegalArgumentException("Invalid sort option");
+                };
+                media.sort(comparator);
         }
-        if ((sortOption == SortOption.SEASONS_ASCENDING || sortOption == SortOption.SEASONS_DESCENDING ||
-                sortOption == SortOption.EPISODES_ASCENDING || sortOption == SortOption.EPISODES_DESCENDING) &&
-                media.stream().anyMatch(m -> !(m instanceof TvShow))) {
-            throw new IllegalArgumentException("Cannot sort by seasons or episodes if list contains non-TvShow items.");
-        }
-
-        Comparator<Media> comparator = switch (sortOption) {
-            case TITLE_ASCENDING -> Comparator.comparing(Media::getTitle);
-            case TITLE_DESCENDING -> Comparator.comparing(Media::getTitle).reversed();
-            case YEAR_ASCENDING -> Comparator.comparingInt(Media::getReleaseYear);
-            case YEAR_DESCENDING -> Comparator.comparingInt(Media::getReleaseYear).reversed();
-            case RATING_ASCENDING -> Comparator.comparingDouble(Media::getRating);
-            case RATING_DESCENDING -> Comparator.comparingDouble(Media::getRating).reversed();
-            case DURATION_ASCENDING -> Comparator.comparingInt((Media m) -> ((Movie) m).getDuration());
-            case DURATION_DESCENDING -> (m1, m2) -> Integer.compare(((Movie) m2).getDuration(), ((Movie) m1).getDuration());
-            case SEASONS_ASCENDING -> Comparator.comparingInt((Media m) -> ((TvShow) m).getNumberOfSeasons());
-            case SEASONS_DESCENDING -> (m1, m2) -> Integer.compare(((TvShow) m2).getNumberOfSeasons(), ((TvShow) m1).getNumberOfSeasons());
-            case EPISODES_ASCENDING -> Comparator.comparingInt((Media m) -> ((TvShow) m).getNumberOfEpisodes());
-            case EPISODES_DESCENDING -> (m1, m2) -> Integer.compare(((TvShow) m2).getNumberOfEpisodes(), ((TvShow) m1).getNumberOfEpisodes());
-            default -> throw new IllegalArgumentException("Invalid sort option");
-        };
-
-        media.sort(comparator);
     }
 
     public enum SortOption {

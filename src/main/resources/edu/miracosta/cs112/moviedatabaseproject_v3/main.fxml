@@ -6,24 +6,25 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.miracosta.cs112.moviedatabaseproject_v3.controller.MainController" stylesheets="@main.css">
     <top>
-        <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
-            <Label text="Media Database" style="-fx-font-size: 20;" />
+        <HBox id="header" alignment="CENTER" spacing="10" styleClass="header">
+            <Label text="Media Database" id="header-label" styleClass="header-label" />
         </HBox>
     </top>
     <center>
-        <VBox spacing="10" style="-fx-padding: 10;">
-            <HBox spacing="10">
-                <TextField fx:id="searchField" promptText="Search..." HBox.hgrow="ALWAYS" />
-                <ComboBox fx:id="filterCombo" promptText="Filter" />
-                <ComboBox fx:id="sortCombo" promptText="Sort"/>
-            </HBox>
-            <TableView fx:id="mediaTableView" VBox.vgrow="ALWAYS">
+        <VBox id="content" spacing="10" styleClass="content">
+            <GridPane id="controls" styleClass="controls" hgap="10" vgap="10">
+                <TextField fx:id="searchField" id="search-field" promptText="Search..." GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="search-field" />
+                <ComboBox fx:id="filterCombo" id="filter-combo" promptText="Filter" GridPane.columnIndex="2" styleClass="filter-combo" />
+                <ComboBox fx:id="sortCombo" id="sort-combo" promptText="Sort" GridPane.columnIndex="3" styleClass="sort-combo" />
+                <Button text="Sort" fx:id="sortButton" id="sort-button" onAction="#sortMedia" GridPane.columnIndex="4" styleClass="sort-button" />
+            </GridPane>
+            <TableView fx:id="mediaTableView" VBox.vgrow="ALWAYS" id="media-table" styleClass="media-table">
                 <columns>
-                    <TableColumn fx:id="titleColumn" text="Title" />
-                    <TableColumn fx:id="releaseYearColumn" text="Release Year" />
-                    <TableColumn fx:id="durationColumn" text="Duration/Seasons" />
-                    <TableColumn fx:id="episodesColumn" text="Episodes" />
-                    <TableColumn fx:id="ratingColumn" text="Rating" />
+                    <TableColumn fx:id="titleColumn" text="Title" id="title-column" />
+                    <TableColumn fx:id="releaseYearColumn" text="Release Year" id="release-year-column" />
+                    <TableColumn fx:id="durationColumn" text="Duration/Seasons" id="duration-column" />
+                    <TableColumn fx:id="episodesColumn" text="Episodes" id="episodes-column" />
+                    <TableColumn fx:id="ratingColumn" text="Rating" id="rating-column" />
                 </columns>
                 <VBox.margin>
                     <Insets top="15" />
@@ -32,11 +33,10 @@
         </VBox>
     </center>
     <bottom>
-        <HBox alignment="CENTER" spacing="10" style="-fx-padding: 10;">
-            <Button text="Add Media" onAction="#addMedia" />
-            <Button text="Edit Media" onAction="#handleEditButton" />
-            <Button text="Sort" /> <!-- Removed onAction="#sortMedia" -->
-            <Button text="Exit" onAction="#exitApp" />
+        <HBox id="footer" alignment="CENTER" spacing="10" styleClass="footer">
+            <Button text="Add Media" onAction="#addMedia" id="add-button" styleClass="add-button" />
+            <Button text="Edit Media" onAction="#handleEditButton" id="edit-button" styleClass="edit-button" />
+            <Button text="Exit" onAction="#exitApp" id="exit-button" styleClass="exit-button" />
         </HBox>
     </bottom>
 </BorderPane>
