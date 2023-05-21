@@ -49,11 +49,13 @@ public class Movie extends Media {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Movie)) return false;
-        Movie movie = (Movie) obj;
-        return getReleaseYear() == movie.getReleaseYear() && Double.compare(movie.getRating(), getRating()) == 0 &&
-                getDuration() == movie.getDuration() && getTitle().equals(movie.getTitle());
+        if (!(obj instanceof Movie movie)) return false;
+        return getReleaseYear() == movie.getReleaseYear() &&
+                Double.compare(movie.getRating(), getRating()) == 0 &&
+                getDuration() == movie.getDuration() &&
+                getTitle().equals(movie.getTitle());
     }
+
 
     @Override
     public int hashCode() {

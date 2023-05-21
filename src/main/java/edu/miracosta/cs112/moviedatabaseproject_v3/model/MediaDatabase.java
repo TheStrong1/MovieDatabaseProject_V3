@@ -1,6 +1,9 @@
 package edu.miracosta.cs112.moviedatabaseproject_v3.model;
 
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseException;
+import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidRatingException;
+import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidYearException;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,7 +16,7 @@ public class MediaDatabase {
         this.media = new ArrayList<>();
     }
 
-    public void addMedia(Media m) throws MediaDatabaseException {
+    public void addMedia(Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
         if (m == null) {
             throw new MediaDatabaseException("Failed to add media. Media object can't be null.");
         }
@@ -31,7 +34,7 @@ public class MediaDatabase {
         media.remove(index);
     }
 
-    public void editMedia(int index, Media m) throws MediaDatabaseException {
+    public void editMedia(int index, Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
         if (m == null) {
             throw new MediaDatabaseException("Failed to edit media. Media object can't be null.");
         }
@@ -42,12 +45,12 @@ public class MediaDatabase {
         media.set(index, m);
     }
 
-    private void validateMedia(Media m) throws MediaDatabaseException {
+    private void validateMedia(Media m) throws InvalidRatingException, InvalidYearException {
         if (m.getReleaseYear() < 1888 || m.getReleaseYear() > java.time.Year.now().getValue()) {
-            throw new MediaDatabaseException("Invalid release year: " + m.getReleaseYear());
+            throw new InvalidYearException("Invalid release year: " + m.getReleaseYear());
         }
         if (m.getRating() < 0.0 || m.getRating() > 10.0) {
-            throw new MediaDatabaseException("Invalid rating: " + m.getRating());
+            throw new InvalidRatingException("Invalid rating: " + m.getRating());
         }
     }
 
