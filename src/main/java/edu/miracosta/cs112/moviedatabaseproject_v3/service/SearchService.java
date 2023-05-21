@@ -9,12 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class SearchService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SearchService.class);
-
     /**
      * Searches through a list of Media items for matches with the given search text.
      *
@@ -25,7 +20,6 @@ public class SearchService {
     public List<Media> searchMedia(String searchText, List<Media> mediaList) {
         // Return all media when searchText is null or empty
         if (searchText == null || searchText.isEmpty()) {
-            LOGGER.info("Search text is null or empty. Returning all media.");
             return new ArrayList<>(mediaList);
         }
 
@@ -47,7 +41,6 @@ public class SearchService {
         try {
             return Optional.of(Integer.parseInt(value));
         } catch (NumberFormatException e) {
-            LOGGER.info("Failed to convert search text to integer. Search text: {}", value);
             return Optional.empty();
         }
     }
@@ -56,7 +49,6 @@ public class SearchService {
         try {
             return Optional.of(Double.parseDouble(value));
         } catch (NumberFormatException e) {
-            LOGGER.info("Failed to convert search text to double. Search text: {}", value);
             return Optional.empty();
         }
     }

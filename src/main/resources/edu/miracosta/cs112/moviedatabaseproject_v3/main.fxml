@@ -16,7 +16,6 @@
                 <TextField fx:id="searchField" id="search-field" promptText="Search..." GridPane.columnIndex="0" GridPane.columnSpan="2" styleClass="search-field" />
                 <ComboBox fx:id="filterCombo" id="filter-combo" promptText="Filter" GridPane.columnIndex="2" styleClass="filter-combo" />
                 <ComboBox fx:id="sortCombo" id="sort-combo" promptText="Sort" GridPane.columnIndex="3" styleClass="sort-combo" />
-                <Button text="Sort" fx:id="sortButton" id="sort-button" onAction="#sortMedia" GridPane.columnIndex="4" styleClass="sort-button" />
             </GridPane>
             <TableView fx:id="mediaTableView" VBox.vgrow="ALWAYS" id="media-table" styleClass="media-table">
                 <columns>

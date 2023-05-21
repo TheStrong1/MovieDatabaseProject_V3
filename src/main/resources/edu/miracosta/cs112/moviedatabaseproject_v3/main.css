@@ -1,32 +1,76 @@
+/* Base Styling */
 .root {
-    -fx-font-family: "Arial";
-    -fx-base: #ffffff;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 14px;
+}
+
+/* Header and Footer Styling */
+.header,
+.footer {
+    -fx-background-color: #2C3E50;
+    -fx-padding: 15px;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.header-label {
+    -fx-text-fill: white;
+}
+
+/* Content Area Styling */
+.content {
+    -fx-padding: 20px;
+    -fx-background-color: #ECF0F1;
+}
+
+.controls {
+    -fx-background-color: #BDC3C7;
+    -fx-padding: 10px;
+    -fx-border-radius: 5px;
+}
+
+/* Input and Button Styling */
+.text-field,
+.combobox-base {
+    -fx-pref-width: 200px;
+    -fx-background-radius: 5px;
+    -fx-border-radius: 5px;
 }
 
 .button {
-    -fx-background-color: #2196F3;
-    -fx-text-fill: #ffffff;
-    -fx-font-size: 14px;
+    -fx-background-color: #3498DB;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5px;
 }
 
 .button:hover {
-    -fx-background-color: #1976D2;
+    -fx-background-color: #2980B9;
 }
 
-.label {
-    -fx-font-size: 20px;
+.button:pressed {
+    -fx-background-color: #2471A3;
+}
+
+/* Table View Styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #BDC3C7;
+    -fx-border-radius: 5px;
+}
+
+.table-row-cell {
+    -fx-border-width: 0 0 1px 0;
+    -fx-border-color: #BDC3C7;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #3498DB;
+}
+
+.table-column {
+    -fx-background-color: transparent;
     -fx-font-weight: bold;
-}
-
-.text-field, .combo-box {
-    -fx-font-size: 14px;
-}
-
-.list-view {
-    -fx-font-size: 14px;
-    -fx-background-color: #f5f5f5;
-}
-
-.list-view:focused {
-    -fx-background-color: #eeeeee;
 }
