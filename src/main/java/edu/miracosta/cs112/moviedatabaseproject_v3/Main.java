@@ -25,7 +25,7 @@ public class Main extends Application {
         mediaDatabase = new MediaDatabase(JSON_FILE_PATH);
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("main.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/edu/miracosta/cs112/moviedatabaseproject_v3/main.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
 
             // Get the controller and set mediaDatabase to it

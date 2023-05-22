@@ -80,7 +80,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                edu.miracosta.cs112.moviedatabaseproject_v3/edu.miracosta.cs112.moviedatabaseproject_v3.HelloApplication
+                                edu.miracosta.cs112.moviedatabaseproject_v3/edu.miracosta.cs112.moviedatabaseproject_v3.Main
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

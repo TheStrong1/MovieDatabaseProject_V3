@@ -55,18 +55,27 @@ public class MainController {
     @FXML
     private TableColumn<Media, Double> ratingColumn;
 
+
     private SearchService searchService;
 
     private static final String JSON_FILE_PATH = "Media.json";
     private MediaDatabase mediaDatabase;
 
     @FXML
-    public void initialize() throws MediaDatabaseException {
+    public void initialize() {
         searchService = new SearchService();
-        mediaDatabase = new MediaDatabase(JSON_FILE_PATH);
-        initAfterMediaDatabase();
+        try {
+            mediaDatabase = new MediaDatabase(JSON_FILE_PATH);
+            initAfterMediaDatabase();
+        } catch (MediaDatabaseException e) {
+            // You could use a dialog to alert the user to the problem here
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("An error occurred while loading the data.");
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
     }
-
 
     // Setter method for the MediaDatabase
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
@@ -132,7 +141,7 @@ public class MainController {
     @FXML
     public void addMedia() {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("AddMedia.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/edu/miracosta/cs112/moviedatabaseproject_v3/AddMedia.fxml"));
             Parent addMediaParent = fxmlLoader.load();
             AddMediaController controller = fxmlLoader.getController();
             controller.setMediaDatabase(mediaDatabase);
@@ -160,7 +169,7 @@ public class MainController {
         }
 
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("EditMedia.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/edu/miracosta/cs112/moviedatabaseproject_v3/EditMedia.fxml"));
             Parent editMediaParent = fxmlLoader.load();
             EditMediaController controller = fxmlLoader.getController();
             controller.setMediaDatabase(mediaDatabase);
