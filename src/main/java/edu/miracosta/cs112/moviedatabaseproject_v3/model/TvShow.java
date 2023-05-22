@@ -30,8 +30,8 @@ public class TvShow extends Media {
 
     public TvShow(TvShow tvShow) {
         super(tvShow);
-        this.numberOfEpisodes = tvShow.numberOfEpisodes;
-        this.numberOfSeasons = tvShow.numberOfSeasons;
+        this.numberOfEpisodes = new SimpleIntegerProperty(tvShow.getNumberOfEpisodes());
+        this.numberOfSeasons = new SimpleIntegerProperty(tvShow.getNumberOfSeasons());
     }
 
     public TvShow(String title, int releaseYear, double rating) throws InvalidTitleException, InvalidYearException, InvalidRatingException {
@@ -64,6 +64,14 @@ public class TvShow extends Media {
             throw new InvalidNumberOfSeasonsException("Invalid number of seasons " + numberOfSeasons + ". Number of seasons must be a positive number.");
         }
         this.numberOfSeasons.set(numberOfSeasons);
+    }
+
+    public void setAll(String title, int releaseYear, double rating, int numberOfEpisodes, int numberOfSeasons) throws InvalidTitleException, InvalidYearException, InvalidRatingException, InvalidNumberOfEpisodesException, InvalidNumberOfSeasonsException {
+        setTitle(title);
+        setReleaseYear(releaseYear);
+        setRating(rating);
+        setNumberOfEpisodes(numberOfEpisodes);
+        setNumberOfSeasons(numberOfSeasons);
     }
 
     public IntegerProperty numberOfSeasonsProperty() {

@@ -22,14 +22,14 @@ public class Movie extends Media {
 
     public Movie(Movie m) throws InvalidTitleException, InvalidYearException, InvalidRatingException, InvalidDurationException {
         super(m);
-        this.duration = m.duration;
+        this.duration = new SimpleIntegerProperty(m.getDuration());
     }
+
 
     public Movie(String title, int releaseYear, double rating) throws InvalidTitleException, InvalidYearException, InvalidRatingException {
         super(title, releaseYear, rating);
         this.duration = new SimpleIntegerProperty(DEFAULT_DURATION);
     }
-
 
     public int getDuration() {
         return duration.get();
@@ -40,6 +40,13 @@ public class Movie extends Media {
             throw new InvalidDurationException("Invalid duration " + duration + ". Duration must be a positive number.");
         }
         this.duration.set(duration);
+    }
+
+    public void setAll(String title, int releaseYear, double rating, int duration) throws InvalidTitleException, InvalidYearException, InvalidRatingException, InvalidDurationException {
+        setTitle(title);
+        setReleaseYear(releaseYear);
+        setRating(rating);
+        setDuration(duration);
     }
 
     public IntegerProperty durationProperty() {

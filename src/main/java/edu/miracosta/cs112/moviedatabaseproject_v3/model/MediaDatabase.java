@@ -1,5 +1,6 @@
 package edu.miracosta.cs112.moviedatabaseproject_v3.model;
 
+import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidTitleException;
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseException;
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidRatingException;
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidYearException;
@@ -53,6 +54,19 @@ public class MediaDatabase {
             throw new InvalidRatingException("Invalid rating: " + m.getRating());
         }
     }
+
+    public void setAll(int index, String title, int releaseYear, double rating) throws MediaDatabaseException, InvalidRatingException, InvalidYearException, InvalidTitleException {
+        if (index < 0 || index >= media.size()) {
+            throw new MediaDatabaseException("Invalid index " + index + ". Index must be within the range of the media list.");
+        }
+        Media m = media.get(index);
+        m.setTitle(title);
+        m.setReleaseYear(releaseYear);
+        m.setRating(rating);
+        validateMedia(m);
+        media.set(index, m);
+    }
+
 
     public List<Media> getAllMedia() {
         return new ArrayList<>(media);
