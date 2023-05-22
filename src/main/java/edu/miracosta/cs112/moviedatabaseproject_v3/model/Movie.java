@@ -22,7 +22,7 @@ public class Movie extends Media {
 
     public Movie(Movie m) throws InvalidTitleException, InvalidYearException, InvalidRatingException, InvalidDurationException {
         super(m);
-        this.duration = m.duration;
+        this.duration = new SimpleIntegerProperty(m.getDuration());
     }
 
     public Movie(String title, int releaseYear, double rating) throws InvalidTitleException, InvalidYearException, InvalidRatingException {

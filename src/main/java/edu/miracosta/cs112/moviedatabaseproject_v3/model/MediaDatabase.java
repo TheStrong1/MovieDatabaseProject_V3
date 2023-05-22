@@ -4,16 +4,25 @@ import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseExcep
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidRatingException;
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.InvalidYearException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class is responsible for maintaining a list of Media items.
+ * It provides functionalities to add, remove, edit, sort and fetch Media items.
+ * It can also load and save Media items from and to a JSON file.
+ */
 public class MediaDatabase {
     private final List<Media> media;
+    private final String jsonFilePath;
 
-    public MediaDatabase() {
+    public MediaDatabase(String jsonFilePath) throws MediaDatabaseException {
         this.media = new ArrayList<>();
+        this.jsonFilePath = jsonFilePath;
+        loadFromJson();
     }
 
     public void addMedia(Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
@@ -25,6 +34,7 @@ public class MediaDatabase {
         }
         validateMedia(m);
         media.add(m);
+        saveToJson();
     }
 
     public void removeMedia(int index) throws MediaDatabaseException {
@@ -32,6 +42,7 @@ public class MediaDatabase {
             throw new MediaDatabaseException("Failed to remove media. Invalid index " + index + ". Index must be within the range of the media list.");
         }
         media.remove(index);
+        saveToJson();
     }
 
     public void editMedia(int index, Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
@@ -43,6 +54,25 @@ public class MediaDatabase {
         }
         validateMedia(m);
         media.set(index, m);
+        saveToJson();
+    }
+
+    private void loadFromJson() throws MediaDatabaseException {
+        try {
+            List<Media> loadedMedia = JsonUtil.readMediaFromJson(jsonFilePath);
+            media.clear();
+            media.addAll(loadedMedia);
+        } catch (IOException e) {
+            throw new MediaDatabaseException("Failed to load data from JSON: " + e.getMessage(), e);
+        }
+    }
+
+    public void saveToJson() throws MediaDatabaseException {
+        try {
+            JsonUtil.writeMediaToJson(media, jsonFilePath);
+        } catch (IOException e) {
+            throw new MediaDatabaseException("Failed to save data to JSON: " + e.getMessage(), e);
+        }
     }
 
     private void validateMedia(Media m) throws InvalidRatingException, InvalidYearException {
@@ -58,15 +88,17 @@ public class MediaDatabase {
         return new ArrayList<>(media);
     }
 
-    public List<Media> getAllMovies() {
+    public List<Movie> getAllMovies() {
         return media.stream()
                 .filter(m -> m instanceof Movie)
+                .map(m -> (Movie) m)
                 .collect(Collectors.toList());
     }
 
-    public List<Media> getAllTvShows() {
+    public List<TvShow> getAllTvShows() {
         return media.stream()
                 .filter(m -> m instanceof TvShow)
+                .map(m -> (TvShow) m)
                 .collect(Collectors.toList());
     }
 

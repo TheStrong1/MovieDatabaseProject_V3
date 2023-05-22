@@ -33,9 +33,9 @@ public abstract class Media {
     }
 
     public Media(Media m) {
-        this.title = m.title;
-        this.releaseYear = m.releaseYear;
-        this.rating = m.rating;
+        this.title = new SimpleStringProperty(m.getTitle());
+        this.releaseYear = new SimpleIntegerProperty(m.getReleaseYear());
+        this.rating = new SimpleDoubleProperty(m.getRating());
     }
 
     public String getTitle() {

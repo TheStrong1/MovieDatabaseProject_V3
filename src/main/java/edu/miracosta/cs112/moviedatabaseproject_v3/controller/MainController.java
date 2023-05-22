@@ -1,6 +1,7 @@
 package edu.miracosta.cs112.moviedatabaseproject_v3.controller;
 
 import edu.miracosta.cs112.moviedatabaseproject_v3.Main;
+import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseException;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.Media;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.Movie;
 import edu.miracosta.cs112.moviedatabaseproject_v3.model.TvShow;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,9 +61,17 @@ public class MainController {
 
     @FXML
     public void initialize() {
-        mediaDatabase = new MediaDatabase();
         searchService = new SearchService();
+        initAfterMediaDatabase();
+    }
 
+    // Setter method for the MediaDatabase
+    public void setMediaDatabase(MediaDatabase mediaDatabase) {
+        this.mediaDatabase = mediaDatabase;
+        initAfterMediaDatabase();
+    }
+
+    private void initAfterMediaDatabase() {
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
         releaseYearColumn.setCellValueFactory(cellData -> cellData.getValue().releaseYearProperty().asObject());
         ratingColumn.setCellValueFactory(cellData -> cellData.getValue().ratingProperty().asObject());
@@ -100,9 +110,13 @@ public class MainController {
 
         List<Media> allMedia;
         if (Objects.equals(filterType, "Movies")) {
-            allMedia = mediaDatabase.getAllMovies();
+            List<Movie> allMovies = mediaDatabase.getAllMovies();
+            allMedia = new ArrayList<>();
+            allMedia.addAll(allMovies);
         } else if (Objects.equals(filterType, "TV Shows")) {
-            allMedia = mediaDatabase.getAllTvShows();
+            List<TvShow> allTvShows = mediaDatabase.getAllTvShows();
+            allMedia = new ArrayList<>();
+            allMedia.addAll(allTvShows);
         } else {
             allMedia = mediaDatabase.getAllMedia();
         }
@@ -184,7 +198,8 @@ public class MainController {
     }
 
     @FXML
-    public void exitApp() {
+    public void exitApp() throws MediaDatabaseException {
+        mediaDatabase.saveToJson();
         System.exit(0);
     }
 }

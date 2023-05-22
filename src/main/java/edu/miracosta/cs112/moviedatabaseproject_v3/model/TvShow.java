@@ -30,8 +30,8 @@ public class TvShow extends Media {
 
     public TvShow(TvShow tvShow) {
         super(tvShow);
-        this.numberOfEpisodes = tvShow.numberOfEpisodes;
-        this.numberOfSeasons = tvShow.numberOfSeasons;
+        this.numberOfEpisodes = new SimpleIntegerProperty(tvShow.getNumberOfEpisodes());
+        this.numberOfSeasons = new SimpleIntegerProperty(tvShow.getNumberOfSeasons());
     }
 
     public TvShow(String title, int releaseYear, double rating) throws InvalidTitleException, InvalidYearException, InvalidRatingException {
