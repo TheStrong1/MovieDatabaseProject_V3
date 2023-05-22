@@ -1,1 +1,24 @@
-[ ]
+[
+  {
+    "type": "Movie",
+    "title": "The Smurfs",
+    "releaseYear": 2011,
+    "duration": 103,
+    "rating": 8.7
+  },
+  {
+    "type": "TvShow",
+    "title": "The Smurfs",
+    "releaseYear": 1981,
+    "seasons": 9,
+    "episodes": 256,
+    "rating": 8.2
+  },
+  {
+    "type": "Movie",
+    "title": "Cloudy with a Chance of Meatballs",
+    "releaseYear": 2009,
+    "duration": 90,
+    "rating": 8.1
+  }
+]

@@ -1,3 +1,4 @@
+
 package edu.miracosta.cs112.moviedatabaseproject_v3.model;
 
 import edu.miracosta.cs112.moviedatabaseproject_v3.exceptions.MediaDatabaseException;

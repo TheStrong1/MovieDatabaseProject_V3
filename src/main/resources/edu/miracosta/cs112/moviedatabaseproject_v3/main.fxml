@@ -26,15 +26,15 @@
                 <TextField id="search-field" fx:id="searchField" promptText="Search..." styleClass="search-field" GridPane.columnIndex="0" GridPane.columnSpan="2" />
                 <ComboBox id="filter-combo" fx:id="filterCombo" promptText="Filter" styleClass="filter-combo" GridPane.columnIndex="2" />
                 <ComboBox id="sort-combo" fx:id="sortCombo" promptText="Sort" styleClass="sort-combo" GridPane.columnIndex="3" />
-            <columnConstraints>
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-               <ColumnConstraints />
-            </columnConstraints>
-            <rowConstraints>
-               <RowConstraints />
-            </rowConstraints>
+                <columnConstraints>
+                    <ColumnConstraints />
+                    <ColumnConstraints />
+                    <ColumnConstraints />
+                    <ColumnConstraints />
+                </columnConstraints>
+                <rowConstraints>
+                    <RowConstraints />
+                </rowConstraints>
             </GridPane>
             <TableView id="media-table" fx:id="mediaTableView" styleClass="media-table" VBox.vgrow="ALWAYS">
                 <columns>

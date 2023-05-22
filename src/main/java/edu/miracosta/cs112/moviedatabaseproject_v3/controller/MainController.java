@@ -55,15 +55,18 @@ public class MainController {
     @FXML
     private TableColumn<Media, Double> ratingColumn;
 
-    private MediaDatabase mediaDatabase;
-
     private SearchService searchService;
 
+    private static final String JSON_FILE_PATH = "Media.json";
+    private MediaDatabase mediaDatabase;
+
     @FXML
-    public void initialize() {
+    public void initialize() throws MediaDatabaseException {
         searchService = new SearchService();
+        mediaDatabase = new MediaDatabase(JSON_FILE_PATH);
         initAfterMediaDatabase();
     }
+
 
     // Setter method for the MediaDatabase
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
