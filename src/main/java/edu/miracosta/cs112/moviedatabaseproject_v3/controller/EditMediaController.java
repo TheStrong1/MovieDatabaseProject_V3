@@ -11,6 +11,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+/**
+ * The EditMediaController class provides the logic for the edit media view.
+ * It contains the fields for media details, and provides methods to initialize and edit the media.
+ */
+
 public class EditMediaController {
     @FXML
     private ComboBox<String> mediaTypeCombo;
@@ -28,18 +33,36 @@ public class EditMediaController {
     private MediaDatabase mediaDatabase;
     private int editIndex;
 
+    /**
+     * Initializes the controller.
+     * Adds a listener to the media type combo box to make the episodes field visible if the selected media type is "TV Show".
+     */
+
     public void initialize() {
         mediaTypeCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
             episodesField.setVisible("TV Show".equals(newValue));
         });
     }
 
+
+    /**
+     * Sets the media database to use for editing.
+     * @param mediaDatabase The media database to use.
+     * @throws IllegalArgumentException If the mediaDatabase is null.
+     */
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
         if (mediaDatabase == null) {
             throw new IllegalArgumentException("MediaDatabase cannot be null.");
         }
         this.mediaDatabase = mediaDatabase;
     }
+
+    /**
+     * Sets the index of the media to edit in the media database's list of all media.
+     * Fills the fields with the media's current values.
+     * @param editIndex The index of the media to edit.
+     * @throws IllegalArgumentException If the index is negative.
+     */
 
     public void setEditIndex(int editIndex) {
         if (editIndex < 0) {
@@ -62,6 +85,13 @@ public class EditMediaController {
             episodesField.setText(String.valueOf(((TvShow) media).getNumberOfEpisodes()));
         }
     }
+
+    /**
+     * Edits the selected media in the media database.
+     * Reads the input fields, creates a new media object (Movie or TvShow), and replaces the existing media with the new one.
+     * Closes the dialog after a successful edit.
+     * Shows an error dialog if any input is invalid or any field is left empty.
+     */
 
     @FXML
     public void editMedia() {
@@ -102,6 +132,11 @@ public class EditMediaController {
             showErrorDialog(e.getMessage());
         }
     }
+
+    /**
+     * Shows an error dialog with a given message.
+     * @param message The message to display in the dialog.
+     */
 
     private void showErrorDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

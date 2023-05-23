@@ -24,6 +24,19 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * The MainController class is the controller for the main.fxml file.
+ * It handles all user interactions with the main scene.
+ * This class is the glue between the view and the model.
+ * It is responsible for updating the view when the model changes.
+ * It is also responsible for updating the model when the user changes the view.
+ *
+ * @see Media
+ * @see MediaDatabase
+ * @see SearchService
+ */
+
 public class MainController {
 
     @FXML
@@ -57,6 +70,12 @@ public class MainController {
 
     private SearchService searchService;
 
+    /**
+     * The initialize method is called when the scene is loaded.
+     * It is responsible for initializing the scene.
+     * It is also responsible for setting up the bindings between the view and the model.
+     */
+
     @FXML
     public void initialize() {
         mediaDatabase = new MediaDatabase();
@@ -84,7 +103,7 @@ public class MainController {
 
         filterCombo.getItems().addAll("All", "Movies", "TV Shows");
 
-        ObservableList<String> sortOptions = FXCollections.observableArrayList("Title", "Release Year", "Rating");
+        ObservableList<String> sortOptions = FXCollections.observableArrayList("Sort", "Title", "Release Year", "Rating");
         sortCombo.setItems(sortOptions);
 
         searchField.textProperty().addListener((obs, oldText, newText) -> updateTable());
@@ -93,6 +112,11 @@ public class MainController {
 
         updateTable();
     }
+
+    /**
+     * The updateTable method is responsible for updating the table view.
+     * It is called whenever the user changes the search field, filter combo box, or sort combo box.
+     */
 
     private void updateTable() {
         String searchText = searchField.getText() == null ? "" : searchField.getText();
@@ -112,6 +136,11 @@ public class MainController {
         sortMedia();
     }
 
+    /**
+     * The addMedia method is called when the user clicks the add button.
+     * It is responsible for opening the add media scene.
+     */
+
     @FXML
     public void addMedia() {
         try {
@@ -128,6 +157,11 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * The handleEditButton method is called when the user clicks the edit button.
+     * It is responsible for opening the edit media scene.
+     */
 
     @FXML
     public void handleEditButton() {
@@ -158,6 +192,11 @@ public class MainController {
         }
     }
 
+    /**
+     * The sortMedia method is called when the user clicks the sort button.
+     * It is responsible for sorting the media items in the table view.
+     */
+
     @FXML
     public void sortMedia() {
         String sortField = sortCombo.getValue();
@@ -165,6 +204,8 @@ public class MainController {
 
         if (sortField != null) {
             switch (sortField) {
+                case "No Sort Option Selected":
+                    // Do nothing (no sort)
                 case "Title":
                     sortOption = MediaDatabase.SortOption.TITLE_ASCENDING;
                     break;
@@ -182,6 +223,11 @@ public class MainController {
             mediaTableView.setItems(FXCollections.observableArrayList(mediaDatabase.getAllMedia()));
         }
     }
+
+    /**
+     * The exitApp method is called when the user clicks the exit button.
+     * It is responsible for exiting the application.
+     */
 
     @FXML
     public void exitApp() {

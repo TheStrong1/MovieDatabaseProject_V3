@@ -8,6 +8,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * The AddMediaController class provides the logic for the add media view.
+ * It contains the fields for media details and provides methods to initialize the view and add media to the database.
+ */
 public class AddMediaController {
 
     @FXML
@@ -24,6 +28,11 @@ public class AddMediaController {
     private TextField ratingField;
 
     private MediaDatabase mediaDatabase;
+
+    /**
+     * Initializes the controller.
+     * Adds a listener to the media type combo box to change the duration field's prompt text and the visibility of the episodes field based on the selected media type.
+     */
 
     public void initialize() {
         mediaTypeCombo.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
@@ -45,9 +54,20 @@ public class AddMediaController {
         });
     }
 
+    /**
+     * Sets the media database to use for adding media.
+     * @param mediaDatabase The media database to use.
+     */
+
     public void setMediaDatabase(MediaDatabase mediaDatabase) {
         this.mediaDatabase = mediaDatabase;
     }
+
+    /**
+     * Adds a new media to the media database.
+     * Reads the input fields, creates a new media object (Movie or TvShow), and adds it to the media database.
+     * Shows a success alert after a successful add, or an error alert if any input is invalid or any required field is left empty.
+     */
 
     public void addMedia() {
         String title = titleField.getText().trim();
@@ -86,6 +106,11 @@ public class AddMediaController {
         }
     }
 
+    /**
+     * Shows a success alert with a message that includes the title of the successfully added media.
+     * @param media The media that was successfully added.
+     */
+
     private void showSuccessAlert(Media media) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -93,6 +118,11 @@ public class AddMediaController {
         alert.setContentText(media.getTitle() + " was successfully added to the database.");
         alert.showAndWait();
     }
+
+    /**
+     * Shows an error alert with a message that includes the exception's message.
+     * @param e The exception that caused the error.
+     */
 
     private void showErrorAlert(Exception e) {
         Alert alert = new Alert(AlertType.ERROR);

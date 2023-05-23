@@ -29,14 +29,20 @@ public class SearchService {
 
         return mediaList.stream()
                 .filter(m -> m.getTitle().toLowerCase().contains(searchLowercase) ||
-                        searchInt.map(val -> m.getReleaseYear() == val ||
-                                (m instanceof Movie && ((Movie) m).getDuration() == val) ||
+                        searchInt.map(val -> val.equals(m.getReleaseYear())).orElse(false) ||
+                        searchInt.map(val -> (m instanceof Movie && ((Movie) m).getDuration() == val) ||
                                 (m instanceof TvShow && (((TvShow) m).getNumberOfSeasons() == val ||
                                         ((TvShow) m).getNumberOfEpisodes() == val))).orElse(false) ||
-                        searchDouble.map(val -> m.getRating() == val).orElse(false))
+                        searchDouble.map(val -> val.equals(m.getRating())).orElse(false))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Converts a String to an Integer if possible.
+     *
+     * @param value The String to convert.
+     * @return An Optional containing the Integer if the String could be converted, or an empty Optional otherwise.
+     */
     private Optional<Integer> toInteger(String value) {
         try {
             return Optional.of(Integer.parseInt(value));
@@ -45,6 +51,12 @@ public class SearchService {
         }
     }
 
+    /**
+     * Converts a String to a Double if possible.
+     *
+     * @param value The String to convert.
+     * @return An Optional containing the Double if the String could be converted, or an empty Optional otherwise.
+     */
     private Optional<Double> toDouble(String value) {
         try {
             return Optional.of(Double.parseDouble(value));

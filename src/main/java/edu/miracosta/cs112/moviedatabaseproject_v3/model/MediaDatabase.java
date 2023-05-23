@@ -10,12 +10,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The MediaDatabase class represents a database of Media objects.
+ * It contains a list of Media objects and methods to add and remove Media objects from the list.
+ * It also contains methods to sort the list of Media objects by title, release year, and rating.
+ */
+
 public class MediaDatabase {
     private final List<Media> media;
 
+    /**
+     * Default constructor which initializes the media list.
+     */
     public MediaDatabase() {
         this.media = new ArrayList<>();
     }
+
+    /**
+     * Returns the number of Media objects in the database.
+     * @return The number of Media objects in the database.
+     */
 
     public void addMedia(Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
         if (m == null) {
@@ -28,12 +42,23 @@ public class MediaDatabase {
         media.add(m);
     }
 
+    /**
+     * Adds a Media object to the database.
+     * @throws MediaDatabaseException If the Media object is null or already in the database.
+     */
+
     public void removeMedia(int index) throws MediaDatabaseException {
         if (index < 0 || index >= media.size()) {
             throw new MediaDatabaseException("Failed to remove media. Invalid index " + index + ". Index must be within the range of the media list.");
         }
         media.remove(index);
     }
+
+    /**
+     * Removes a Media object from the database.
+     * @param index The index of the Media object to remove.
+     * @throws MediaDatabaseException If the index is invalid.
+     */
 
     public void editMedia(int index, Media m) throws MediaDatabaseException, InvalidRatingException, InvalidYearException {
         if (m == null) {
@@ -46,6 +71,13 @@ public class MediaDatabase {
         media.set(index, m);
     }
 
+    /**
+     * Validates the release year and rating of a Media object.
+     * @param m The Media object to validate.
+     * @throws InvalidYearException If the release year is not between 1888 and the current year.
+     * @throws InvalidRatingException If the rating is not between 0.0 and 10.0.
+     */
+
     private void validateMedia(Media m) throws InvalidRatingException, InvalidYearException {
         if (m.getReleaseYear() < 1888 || m.getReleaseYear() > java.time.Year.now().getValue()) {
             throw new InvalidYearException("Invalid release year: " + m.getReleaseYear());
@@ -54,6 +86,18 @@ public class MediaDatabase {
             throw new InvalidRatingException("Invalid rating: " + m.getRating());
         }
     }
+
+    /**
+     * Sets the title, release year, and rating of a Media object in the database.
+     * @param index The index of the Media object to edit.
+     * @param title The new title of the Media object.
+     * @param releaseYear The new release year of the Media object.
+     * @param rating The new rating of the Media object.
+     * @throws MediaDatabaseException If the index is invalid or the parameters are not valid.
+     * @throws InvalidTitleException If the title is null or empty.
+     * @throws InvalidYearException If the release year is not between 1888 and the current year.
+     * @throws InvalidRatingException If the rating is not between 0.0 and 10.0.
+     */
 
     public void setAll(int index, String title, int releaseYear, double rating) throws MediaDatabaseException, InvalidRatingException, InvalidYearException, InvalidTitleException {
         if (index < 0 || index >= media.size()) {
@@ -67,10 +111,20 @@ public class MediaDatabase {
         media.set(index, m);
     }
 
+    /**
+     * Returns the Media object at the specified index.
+     * @return The Media object at the specified index.
+     * @throws MediaDatabaseException If the index is invalid.
+     */
 
     public List<Media> getAllMedia() {
         return new ArrayList<>(media);
     }
+
+    /**
+     * Returns a list of all Media objects in the database.
+     * @return A list of all Media objects in the database.
+     */
 
     public List<Media> getAllMovies() {
         return media.stream()
@@ -78,11 +132,21 @@ public class MediaDatabase {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Returns a list of all Movie objects in the database.
+     * @return A list of all Movie objects in the database.
+     */
+
     public List<Media> getAllTvShows() {
         return media.stream()
                 .filter(m -> m instanceof TvShow)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Returns a list of all TvShow objects in the database.
+     * @return A list of all TvShow objects in the database.
+     */
 
     public void sortMedia(SortOption sortOption) {
         switch (sortOption) {
@@ -117,6 +181,11 @@ public class MediaDatabase {
                 media.sort(comparator);
         }
     }
+
+    /**
+     * Sorts the Media objects in the database.
+     * @throws IllegalArgumentException If the sort option is invalid.
+     */
 
     public enum SortOption {
         TITLE_ASCENDING,
