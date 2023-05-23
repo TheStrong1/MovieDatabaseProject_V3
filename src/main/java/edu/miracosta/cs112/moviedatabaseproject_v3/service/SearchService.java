@@ -9,7 +9,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * The SearchService class provides functionality to search through media items.
+ * This class was implemented to encapsulate the logic for searching media items
+ * based on a search text input.
+ * It allows for a more organized and efficient way to manage the searching functionality
+ * of the media items within the application, keeping the searching logic separate
+ * from the main application code.
+ * This separation of concerns aids in code readability, maintainability, and re-usability.
+ */
+
 public class SearchService {
+
+
+
     /**
      * Searches through a list of Media items for matches with the given search text.
      *

@@ -35,6 +35,7 @@
         <HBox id="footer" alignment="CENTER" spacing="10" styleClass="footer">
             <Button text="Add Media" onAction="#addMedia" id="add-button" styleClass="add-button" />
             <Button text="Edit Media" onAction="#handleEditButton" id="edit-button" styleClass="edit-button" />
+            <Button text="Remove Media" onAction="#handleRemoveButton" id="remove-button" styleClass="remove-button" />
             <Button text="Exit" onAction="#exitApp" id="exit-button" styleClass="exit-button" />
         </HBox>
     </bottom>

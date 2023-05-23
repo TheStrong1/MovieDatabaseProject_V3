@@ -11,7 +11,7 @@ import java.io.IOException;
  * The Main class is the entry point for the Media Database application.
  * This class extends the Application class from JavaFX and overrides the start method.
  *
- * @author Chris
+ * @author Chris Strong
  * @version UD_3
  */
 public class Main extends Application {
